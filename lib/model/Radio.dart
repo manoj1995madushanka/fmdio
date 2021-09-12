@@ -1,195 +1,184 @@
-class RadioList {
-  final List<Radio> radios;
+import 'dart:convert';
 
-//<editor-fold desc="Data Methods">
+import 'package:flutter/foundation.dart';
 
-  const RadioList({
+class MyRadioList {
+  final List<RadioDao> radios;
+
+  MyRadioList({
     this.radios,
   });
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is RadioList &&
-          runtimeType == other.runtimeType &&
-          radios == other.radios);
-
-  @override
-  int get hashCode => radios.hashCode;
-
-  @override
-  String toString() {
-    return 'RadioList{' + ' radios: $radios,' + '}';
-  }
-
-  RadioList copyWith({
-    List<Radio> radios,
+  MyRadioList copyWith({
+    List<RadioDao> radios,
   }) {
-    return RadioList(
+    return MyRadioList(
       radios: radios ?? this.radios,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'radios': this.radios,
+      'radios': radios?.map((x) => x?.toMap())?.toList(),
     };
   }
 
-  factory RadioList.fromMap(Map<String, dynamic> map) {
-    return RadioList(
-      radios: map['radios'] as List<Radio>,
+  factory MyRadioList.fromMap(Map<String, dynamic> map) {
+    if (map == null) return null;
+
+    return MyRadioList(
+      radios:
+          List<RadioDao>.from(map['radios']?.map((x) => RadioDao.fromMap(x))),
     );
   }
 
-//</editor-fold>
+  String toJson() => json.encode(toMap());
+
+  factory MyRadioList.fromJson(String source) =>
+      MyRadioList.fromMap(json.decode(source));
+
+  @override
+  String toString() => 'MyRadioList(radios: $radios)';
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+
+    return o is MyRadioList && listEquals(o.radios, radios);
+  }
+
+  @override
+  int get hashCode => radios.hashCode;
 }
 
-class Radio {
+class RadioDao {
   final int id;
+  final int order;
   final String name;
   final String tagline;
   final String color;
   final String desc;
   final String url;
+  final String category;
   final String icon;
   final String image;
   final String lang;
-  final String category;
-  final String disliked;
-  final int order;
-
-//<editor-fold desc="Data Methods">
-
-  const Radio({
+  RadioDao({
     this.id,
+    this.order,
     this.name,
     this.tagline,
     this.color,
     this.desc,
     this.url,
+    this.category,
     this.icon,
     this.image,
     this.lang,
-    this.category,
-    this.disliked,
-    this.order,
   });
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is Radio &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          name == other.name &&
-          tagline == other.tagline &&
-          color == other.color &&
-          desc == other.desc &&
-          url == other.url &&
-          icon == other.icon &&
-          image == other.image &&
-          lang == other.lang &&
-          category == other.category &&
-          disliked == other.disliked &&
-          order == other.order);
-
-  @override
-  int get hashCode =>
-      id.hashCode ^
-      name.hashCode ^
-      tagline.hashCode ^
-      color.hashCode ^
-      desc.hashCode ^
-      url.hashCode ^
-      icon.hashCode ^
-      image.hashCode ^
-      lang.hashCode ^
-      category.hashCode ^
-      disliked.hashCode ^
-      order.hashCode;
-
-  @override
-  String toString() {
-    return 'Radio{' +
-        ' id: $id,' +
-        ' name: $name,' +
-        ' tagline: $tagline,' +
-        ' color: $color,' +
-        ' desc: $desc,' +
-        ' url: $url,' +
-        ' icon: $icon,' +
-        ' image: $image,' +
-        ' lang: $lang,' +
-        ' category: $category,' +
-        ' disliked: $disliked,' +
-        ' order: $order,' +
-        '}';
-  }
-
-  /*Radio copyWith({
-    int? id,
-    String? name,
-    String? tagline,
-    String? color,
-    String? desc,
-    String? url,
-    String? icon,
-    String? image,
-    String? lang,
-    String? category,
-    String? disliked,
-    int? order,
+  RadioDao copyWith({
+    int id,
+    int order,
+    String name,
+    String tagline,
+    String color,
+    String desc,
+    String url,
+    String category,
+    String icon,
+    String image,
+    String lang,
   }) {
-    return Radio(
+    return RadioDao(
       id: id ?? this.id,
+      order: order ?? this.order,
       name: name ?? this.name,
       tagline: tagline ?? this.tagline,
       color: color ?? this.color,
       desc: desc ?? this.desc,
       url: url ?? this.url,
+      category: category ?? this.category,
       icon: icon ?? this.icon,
       image: image ?? this.image,
       lang: lang ?? this.lang,
-      category: category ?? this.category,
-      disliked: disliked ?? this.disliked,
-      order: order ?? this.order,
     );
-  }*/
+  }
 
   Map<String, dynamic> toMap() {
     return {
-      'id': this.id,
-      'name': this.name,
-      'tagline': this.tagline,
-      'color': this.color,
-      'desc': this.desc,
-      'url': this.url,
-      'icon': this.icon,
-      'image': this.image,
-      'lang': this.lang,
-      'category': this.category,
-      'disliked': this.disliked,
-      'order': this.order,
+      'id': id,
+      'order': order,
+      'name': name,
+      'tagline': tagline,
+      'color': color,
+      'desc': desc,
+      'url': url,
+      'category': category,
+      'icon': icon,
+      'image': image,
+      'lang': lang,
     };
   }
 
-  factory Radio.fromMap(Map<String, dynamic> map) {
-    return Radio(
-      id: map['id'] as int,
-      name: map['name'] as String,
-      tagline: map['tagline'] as String,
-      color: map['color'] as String,
-      desc: map['desc'] as String,
-      url: map['url'] as String,
-      icon: map['icon'] as String,
-      image: map['image'] as String,
-      lang: map['lang'] as String,
-      category: map['category'] as String,
-      disliked: map['disliked'] as String,
-      order: map['order'] as int,
+  factory RadioDao.fromMap(Map<String, dynamic> map) {
+    if (map == null) return null;
+
+    return RadioDao(
+      id: map['id'],
+      order: map['order'],
+      name: map['name'],
+      tagline: map['tagline'],
+      color: map['color'],
+      desc: map['desc'],
+      url: map['url'],
+      category: map['category'],
+      icon: map['icon'],
+      image: map['image'],
+      lang: map['lang'],
     );
   }
 
-//</editor-fold>
+  String toJson() => json.encode(toMap());
+
+  factory RadioDao.fromJson(String source) =>
+      RadioDao.fromMap(json.decode(source));
+
+  @override
+  String toString() {
+    return 'MyRadio(id: $id, order: $order, name: $name, tagline: $tagline, color: $color, desc: $desc, url: $url, category: $category, icon: $icon, image: $image, lang: $lang)';
+  }
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+
+    return o is RadioDao &&
+        o.id == id &&
+        o.order == order &&
+        o.name == name &&
+        o.tagline == tagline &&
+        o.color == color &&
+        o.desc == desc &&
+        o.url == url &&
+        o.category == category &&
+        o.icon == icon &&
+        o.image == image &&
+        o.lang == lang;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+    order.hashCode ^
+    name.hashCode ^
+    tagline.hashCode ^
+    color.hashCode ^
+    desc.hashCode ^
+    url.hashCode ^
+    category.hashCode ^
+    icon.hashCode ^
+    image.hashCode ^
+    lang.hashCode;
+  }
 }
